@@ -1,3 +1,95 @@
+// Loading Data
+window.addEventListener('DOMContentLoaded', () =>{
+  axios.get('https://crudcrud.com/api/6e3345074e944ae5a813058e50c7897c/bookingLists')
+  .then((res) =>{
+    for(let i=0;i<res.data.length;i++)
+    loadDatas(res.data[i]);
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+}) 
+
+//Data loging fuction
+function loadDatas (datas) {
+
+  //Adding Booking Informations as a list
+  //Creating New Tr
+  let newTr = document.createElement('tr');
+  
+
+  //Creating New Td
+  let lastUserIdTd = document.createElement('td');
+  lastUserIdTd.style.display = 'none';
+
+
+  let nameTd = document.createElement('td');
+  nameTd.className="Name"
+
+  let emailTd = document.createElement('td');
+  emailTd.className="Email"
+
+  let phoneTd = document.createElement('td');
+  phoneTd.className="Phone"
+
+  let dateTd = document.createElement('td');
+  dateTd.className="Date"
+
+  let timeTd = document.createElement('td');
+  timeTd.className="Time"
+
+  let btnTd = document.createElement('td');
+
+
+  //Appending Text
+  let userId = document.createTextNode(datas._id)
+  lastUserIdTd.appendChild(userId);
+
+  let nameText = document.createTextNode(datas.name);
+  nameTd.appendChild(nameText);
+
+  let emailText = document.createTextNode(datas.email);
+  emailTd.appendChild(emailText);
+
+  let phoneText = document.createTextNode(datas.number);
+  phoneTd.appendChild(phoneText);
+
+  let dateText = document.createTextNode(datas.date);
+  dateTd.appendChild(dateText);
+
+  let timeText = document.createTextNode(datas.time);
+  timeTd.appendChild(timeText);
+
+  let editBtn = document.createElement('button');
+  editBtn.className = 'btn btn-success edit';
+  let editBtnText = document.createTextNode('Edit');
+  editBtn.appendChild(editBtnText);
+  editBtn.style.marginRight='12px';
+  btnTd.appendChild(editBtn);
+
+  let delBtn = document.createElement('button');
+  delBtn.className = 'btn btn-warning delete';
+  let delBtnText = document.createTextNode('Delete');
+  delBtn.appendChild(delBtnText);
+  btnTd.appendChild(delBtn);
+
+
+  //Appending Td into Tr
+  newTr.appendChild(lastUserIdTd);
+  newTr.appendChild(nameTd);
+  newTr.appendChild(emailTd);
+  newTr.appendChild(phoneTd);
+  newTr.appendChild(dateTd);
+  newTr.appendChild(timeTd);
+  newTr.appendChild(btnTd);
+
+
+  //Appending Tr into Tbody
+  tableBody.appendChild(newTr);
+
+}
+
+
 let form = document.querySelector("form").addEventListener("submit", myfun);
 function myfun(e) {
   e.preventDefault();
@@ -39,88 +131,7 @@ function myfun(e) {
       axios.get('https://crudcrud.com/api/6e3345074e944ae5a813058e50c7897c/bookingLists')
     .then((res) => {
         const lastData = res.data.length-1
-        console.log(res.data[lastData]._id)
-
-
-        //Adding Booking Informations as a list
-    //Creating New Tr
-    let newTr = document.createElement('tr');
-    
-
-    //Creating New Td
-    let lastUserIdTd = document.createElement('td');
-    lastUserIdTd.style.display = 'none';
-
-
-    let nameTd = document.createElement('td');
-    nameTd.className="Name"
-
-    let emailTd = document.createElement('td');
-    emailTd.className="Email"
-
-    let phoneTd = document.createElement('td');
-    phoneTd.className="Phone"
-
-    let dateTd = document.createElement('td');
-    dateTd.className="Date"
-
-    let timeTd = document.createElement('td');
-    timeTd.className="Time"
-
-    let btnTd = document.createElement('td');
-
-     
-
-
-
-
-    //Appending Text
-    let userId = document.createTextNode(res.data[lastData]._id)
-    lastUserIdTd.appendChild(userId);
-
-    let nameText = document.createTextNode(res.data[lastData].name);
-    nameTd.appendChild(nameText);
-
-    let emailText = document.createTextNode(res.data[lastData].email);
-    emailTd.appendChild(emailText);
-
-    let phoneText = document.createTextNode(res.data[lastData].number);
-    phoneTd.appendChild(phoneText);
-
-    let dateText = document.createTextNode(res.data[lastData].date);
-    dateTd.appendChild(dateText);
-
-    let timeText = document.createTextNode(res.data[lastData].time);
-    timeTd.appendChild(timeText);
-
-    let editBtn = document.createElement('button');
-    editBtn.className = 'btn btn-success edit';
-    let editBtnText = document.createTextNode('Edit');
-    editBtn.appendChild(editBtnText);
-    editBtn.style.marginRight='12px';
-    btnTd.appendChild(editBtn);
-
-    let delBtn = document.createElement('button');
-    delBtn.className = 'btn btn-warning delete';
-    let delBtnText = document.createTextNode('Delete');
-    delBtn.appendChild(delBtnText);
-    btnTd.appendChild(delBtn);
-
-
-    //Appending Td into Tr
-    newTr.appendChild(lastUserIdTd);
-    newTr.appendChild(nameTd);
-    newTr.appendChild(emailTd);
-    newTr.appendChild(phoneTd);
-    newTr.appendChild(dateTd);
-    newTr.appendChild(timeTd);
-    newTr.appendChild(btnTd);
-  
-
-    //Appending Tr into Tbody
-    tableBody.appendChild(newTr);
-
-
+        loadDatas(res.data[lastData]);
     })
     .catch(err => console.log(err))
 
@@ -195,6 +206,9 @@ function removeItem(e){
   }
   }
 }
+
+
+
 
 
 
