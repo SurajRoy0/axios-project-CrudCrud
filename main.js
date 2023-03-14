@@ -1,22 +1,22 @@
 // Loading Data
-window.addEventListener('DOMContentLoaded', () =>{
-  axios.get('https://crudcrud.com/api/6e3345074e944ae5a813058e50c7897c/bookingLists')
-  .then((res) =>{
-    for(let i=0;i<res.data.length;i++)
-    loadDatas(res.data[i]);
-  })
-  .catch((err) => {
-    console.log(err);
-  })
-}) 
+window.addEventListener('DOMContentLoaded', () => {
+  axios.get('https://crudcrud.com/api/3e1fd5f7b9ca4e7b8367cf191c20a56c/bookingLists')
+    .then((res) => {
+      for (let i = 0; i < res.data.length; i++)
+        loadDatas(res.data[i]);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+})
 
 //Data loging fuction
-function loadDatas (datas) {
+function loadDatas(datas) {
 
   //Adding Booking Informations as a list
   //Creating New Tr
   let newTr = document.createElement('tr');
-  
+
 
   //Creating New Td
   let lastUserIdTd = document.createElement('td');
@@ -24,19 +24,19 @@ function loadDatas (datas) {
 
 
   let nameTd = document.createElement('td');
-  nameTd.className="Name"
+  nameTd.className = "Name"
 
   let emailTd = document.createElement('td');
-  emailTd.className="Email"
+  emailTd.className = "Email"
 
   let phoneTd = document.createElement('td');
-  phoneTd.className="Phone"
+  phoneTd.className = "Phone"
 
   let dateTd = document.createElement('td');
-  dateTd.className="Date"
+  dateTd.className = "Date"
 
   let timeTd = document.createElement('td');
-  timeTd.className="Time"
+  timeTd.className = "Time"
 
   let btnTd = document.createElement('td');
 
@@ -64,7 +64,7 @@ function loadDatas (datas) {
   editBtn.className = 'btn btn-success edit';
   let editBtnText = document.createTextNode('Edit');
   editBtn.appendChild(editBtnText);
-  editBtn.style.marginRight='12px';
+  editBtn.style.marginRight = '12px';
   btnTd.appendChild(editBtn);
 
   let delBtn = document.createElement('button');
@@ -83,24 +83,25 @@ function loadDatas (datas) {
   newTr.appendChild(timeTd);
   newTr.appendChild(btnTd);
 
-
   //Appending Tr into Tbody
-  tableBody.appendChild(newTr);
+  document.querySelector('#tableBody').appendChild(newTr);
 
 }
 
-
+// Adding Event Listener in Submit
 let form = document.querySelector("form").addEventListener("submit", myfun);
 function myfun(e) {
   e.preventDefault();
+  
+  // Taking The Values Of Inputs
   let inputName = document.querySelector("#name").value;
   let inputEmail = document.querySelector("#email").value;
   let inputNumber = document.querySelector("#phone").value;
   let inputDate = document.getElementById("date").value;
   let inputTime = document.getElementById("time").value;
-  let tableBody = document.querySelector('#tableBody');
 
   if (
+    //Checking Inputs are Empty Or Not
     inputName === "" ||
     inputEmail === "" ||
     inputNumber === "" ||
@@ -110,102 +111,105 @@ function myfun(e) {
     alert("Please Fill All credentials");
   } else {
 
-
     //Sending The User's Data
-    const networkAddress = 'https://crudcrud.com/api/6e3345074e944ae5a813058e50c7897c/bookingLists';
-      axios({
-          method: "post",
-          url: networkAddress,
-          data: {
-            name: inputName,
-            email: inputEmail,
-            number: inputNumber,
-            date: inputDate,
-            time : inputTime
-          }
-      })
+    const networkAddress = 'https://crudcrud.com/api/3e1fd5f7b9ca4e7b8367cf191c20a56c/bookingLists';
+    axios({
+      method: "post",
+      url: networkAddress,
+      data: {
+        name: inputName,
+        email: inputEmail,
+        number: inputNumber,
+        date: inputDate,
+        time: inputTime
+      }
+    })
       .then(res => res)
       .catch(err => console.log(err))
+    location.reload();
 
-      //Getting The User's Data
-      axios.get('https://crudcrud.com/api/6e3345074e944ae5a813058e50c7897c/bookingLists')
-    .then((res) => {
-        const lastData = res.data.length-1
-        loadDatas(res.data[lastData]);
-    })
-    .catch(err => console.log(err))
+    //Clearing The inputs
+    document.querySelector("#name").value = '';
+    document.querySelector("#email").value = '';
+    document.querySelector("#phone").value = '';
+    document.getElementById("date").value = '';
+    document.getElementById("time").value = '';
 
-    document.querySelector("#name").value= '';
-    document.querySelector("#email").value= '';
-    document.querySelector("#phone").value= '';
-    document.getElementById("date").value= '';
-    document.getElementById("time").value= '';
-    
 
     //Submit Successful Alert
-    alert("Registration Done Please Check Console");
-    
+    alert("Registration Done");
+
   }
 
 }
 
+
 let bookTable = document.querySelector('#book-table')
 let tableBody = document.querySelector('#tableBody');
-bookTable.addEventListener('click',removeItem);
+
+//Adding A evnetlinstner to edit and delete button
+bookTable.addEventListener('click', removeItem);
 
 //Removing Items
-function removeItem(e){
-  if(e.target.classList.contains('delete')){
-      if(confirm('Are You Sure?')){
-          let deleteItem = e.target.parentElement.parentElement;
-          let deleteId = deleteItem.firstElementChild.textContent;
-          tableBody.removeChild(deleteItem);
-          
+function removeItem(e) {
+  //identifying which delete button
+  if (e.target.classList.contains('delete')) {
+    if (confirm('Are You Sure?')) {
 
-          //delecting data from server
-          let networkAddress = 'https://crudcrud.com/api/6e3345074e944ae5a813058e50c7897c/bookingLists';
+      //deleeing data from document
+      let deleteItem = e.target.parentElement.parentElement;
+      let deleteId = deleteItem.firstElementChild.textContent;
+      tableBody.removeChild(deleteItem);
 
-          let deletePath = networkAddress +'/'+ deleteId
-          
-          axios
-          .delete(deletePath)
-          .then(res => res)
-          .catch(err => console.log(err))
-      }
-      
+
+      //delecting data from server
+      let networkAddress = 'https://crudcrud.com/api/3e1fd5f7b9ca4e7b8367cf191c20a56c/bookingLists';
+
+      let deletePath = networkAddress + '/' + deleteId
+    
+      axios
+        .delete(deletePath)
+        .then(res => res)
+        .catch(err => console.log(err))
+    }
+
   }
-  else if(e.target.classList.contains('edit')){
-    if(confirm('Are You Want To Edit This Booking?')){
+  else if (e.target.classList.contains('edit')) {
+    if (confirm('Are You Want To Edit This Booking?')) {
 
+      // again inisializing casue i don't know why globally inisialization is not working, dukh bhari kahani mera
       let inputName = document.querySelector(".Name").textContent;
       let inputEmail = document.querySelector(".Email").textContent;
       let inputNumber = document.querySelector(".Phone").textContent;
       let inputDate = document.querySelector(".Date").textContent;
       let inputTime = document.querySelector(".Time").textContent;
 
-      document.querySelector("#name").value= inputName;
-      document.querySelector("#email").value= inputEmail;
-      document.querySelector("#phone").value= inputNumber;
-      document.getElementById("date").value= inputDate;
-      document.getElementById("time").value= inputTime;
+      //filling the input value with edit object's data
+      document.querySelector("#name").value = inputName;
+      document.querySelector("#email").value = inputEmail;
+      document.querySelector("#phone").value = inputNumber;
+      document.getElementById("date").value = inputDate;
+      document.getElementById("time").value = inputTime;
 
+      //deleeing data from document
       let deleteItem = e.target.parentElement.parentElement;
-      let deleteId = deleteItem.firstElementChild.textContent;
+      let editId = deleteItem.firstElementChild.textContent;
       tableBody.removeChild(deleteItem);
 
       //delecting data from server
-      let networkAddress = 'https://crudcrud.com/api/6e3345074e944ae5a813058e50c7897c/bookingLists';
-
-      let deletePath = networkAddress +'/'+ deleteId
-      
-      axios
-      .delete(deletePath)
-      .then(res => res)
-      .catch(err => console.log(err))
-
-  }
+      let networkAddress = 'https://crudcrud.com/api/3e1fd5f7b9ca4e7b8367cf191c20a56c/bookingLists';
+      let editPath = networkAddress + '/' + editId;
+      axios.delete(editPath)
+        .then(response => {
+          console.log('Object successfully updated:', response.data);
+        })
+        .catch(error => {
+          console.error('Error updating object:', error);
+        });
+    }
   }
 }
+
 
 
 
